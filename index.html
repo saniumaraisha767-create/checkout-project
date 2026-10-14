@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Todo Done</title>
+<style>
+  body { background: #121212; color: white; font-family: Arial; padding: 15px; margin:0; }
+  .header { background: #0a1628; border-radius: 25px; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .circle { background: white; color: black; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
+  .task { background: #1e1e1e; border: 1px solid #333; padding: 12px; border-radius: 10px; margin-bottom: 10px; display: flex; gap: 10px; list-style: none; align-items: center; }
+  .done span { text-decoration: line-through; color: #888; }
+  ul { padding: 0; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div><h2 style="margin:0">Todo Done</h2><p>5/8 tasks done</p></div>
+  <div class="circle" id="circle">5/8</div>
+</div>
+
+<ul id="taskList">
+  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Wake up</span></li>
+  <li class="task"><input type="checkbox" onchange="updateCounter()"><span>Study CSS</span></li>
+  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Do assignment</span></li>
+  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Eat breakfast</span></li>
+  <li class="task"><input type="checkbox" onchange="updateCounter()"><span>Go to class</span></li>
+  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Practice coding</span></li>
+  <li class="task"><input type="checkbox" onchange="updateCounter()"><span>Study JavaScript</span></li>
+  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Sleep</span></li>
+</ul>
+
+<script>
+function updateCounter() {
+  const all = document.querySelectorAll('input[type="checkbox"]');
+  let done = 0;
+  all.forEach((box, i) => {
+    const li = box.parentElement;
+    if(box.checked){ done++; li.classList.add('done'); }
+    else{ li.classList.remove('done'); }
+  });
+  document.getElementById('circle').textContent = done + '/8';
+}
+updateCounter();
+</script>
+
+</body>
+</html>
