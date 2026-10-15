@@ -2,47 +2,73 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Todo Done</title>
 <style>
-  body { background: #121212; color: white; font-family: Arial; padding: 15px; margin:0; }
-  .header { background: #0a1628; border-radius: 25px; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
-  .circle { background: white; color: black; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
-  .task { background: #1e1e1e; border: 1px solid #333; padding: 12px; border-radius: 10px; margin-bottom: 10px; display: flex; gap: 10px; list-style: none; align-items: center; }
-  .done span { text-decoration: line-through; color: #888; }
-  ul { padding: 0; }
+  body { background:#000; font-family: sans-serif; display:flex; justify-content:center; padding:20px; }
+  .app { width:360px; background:#121212; border-radius:30px; padding:15px; }
+  .header { background:#0f1a2e; border-radius:25px; padding:20px; display:flex; justify-content:space-between; align-items:center; color:white; }
+  .header h1 { margin:0; font-size:28px; }
+  .header p { margin:5px 0 0; opacity:0.7; font-size:14px; }
+  .circle { background:white; color:black; width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:bold; }
+  .input-row { display:flex; gap:10px; margin:20px 5px; }
+  .input-row input { flex:1; background:#1e1e1e; border:none; padding:12px 15px; border-radius:12px; color:white; outline:none; }
+  .input-row button { width:38px; height:38px; border-radius:50%; border:none; background:white; font-size:22px; cursor:pointer; }
+  .task { background:#1e1e1e; padding:14px; border-radius:12px; display:flex; align-items:center; gap:12px; margin-bottom:10px; color:white; }
+  .task input { width:18px; height:18px; accent-color:#00ff88; }
+  .task span:last-child { margin-left:auto; }
 </style>
 </head>
 <body>
+<div class="app">
+  <div class="header">
+    <div><h1>Todo Done</h1><p>12.09.2025</p></div>
+    <div class="circle" id="counter">5/8</div>
+  </div>
 
-<div class="header">
-  <div><h2 style="margin:0">Todo Done</h2><p>5/8 tasks done</p></div>
-  <div class="circle" id="circle">5/8</div>
+  <div class="input-row">
+    <input id="newTask" placeholder="inpute a new task">
+    <button id="addBtn">+</button>
+  </div>
+
+  <div id="taskList">
+    <div class="task"><input type="checkbox" checked><span>Text</span><span>⋮</span></div>
+    <div class="task"><input type="checkbox"><span>Text</span><span>⋮</span></div>
+    <div class="task"><input type="checkbox" checked><span>Text</span><span>⋮</span></div>
+    <div class="task"><input type="checkbox" checked><span>Text</span><span>⋮</span></div>
+    <div class="task"><input type="checkbox"><span>Text</span><span>⋮</span></div>
+    <div class="task"><input type="checkbox" checked><span>Text</span><span>⋮</span></div>
+    <div class="task"><input type="checkbox"><span>Text</span><span>⋮</span></div>
+    <div class="task"><input type="checkbox" checked><span>Text</span><span>⋮</span></div>
+  </div>
 </div>
 
-<ul id="taskList">
-  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Wake up</span></li>
-  <li class="task"><input type="checkbox" onchange="updateCounter()"><span>Study CSS</span></li>
-  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Do assignment</span></li>
-  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Eat breakfast</span></li>
-  <li class="task"><input type="checkbox" onchange="updateCounter()"><span>Go to class</span></li>
-  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Practice coding</span></li>
-  <li class="task"><input type="checkbox" onchange="updateCounter()"><span>Study JavaScript</span></li>
-  <li class="task done"><input type="checkbox" checked onchange="updateCounter()"><span>Sleep</span></li>
-</ul>
-
 <script>
-function updateCounter() {
-  const all = document.querySelectorAll('input[type="checkbox"]');
-  let done = 0;
-  all.forEach((box, i) => {
-    const li = box.parentElement;
-    if(box.checked){ done++; li.classList.add('done'); }
-    else{ li.classList.remove('done'); }
-  });
-  document.getElementById('circle').textContent = done + '/8';
-}
-updateCounter();
-</script>
+  const counter = document.getElementById('counter');
+  const taskList = document.getElementById('taskList');
+  const newTaskInput = document.getElementById('newTask');
+  const addBtn = document.getElementById('addBtn');
 
+  function updateCounter() {
+    const all = taskList.querySelectorAll('input[type="checkbox"]');
+    const done = taskList.querySelectorAll('input[type="checkbox"]:checked').length;
+    counter.textContent = `${done}/${all.length}`;
+  }
+
+  function addTask() {
+    const text = newTaskInput.value.trim();
+    if (!text) return;
+    const div = document.createElement('div');
+    div.className = 'task';
+    div.innerHTML = `<input type="checkbox"><span>${text}</span><span>⋮</span>`;
+    taskList.appendChild(div);
+    div.querySelector('input').addEventListener('change', updateCounter);
+    newTaskInput.value = "";
+    updateCounter();
+  }
+
+  taskList.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', updateCounter));
+  addBtn.addEventListener('click', addTask);
+  newTaskInput.addEventListener('keypress', e => { if(e.key==='Enter') addTask(); });
+  updateCounter();
+</script>
 </body>
 </html>
